@@ -77,11 +77,11 @@ async function createParty(name, description, date, location) {
   }
 }
 
-// event handler for the createParty function
+// function for event handler, for the createParty function
 async function addParty(event){
   event.preventDefault();
   const dateString = new Date(addPartyForm.date.value);
-  const dateISOString = dateString.toISOString(); 
+  const dateISOString = dateString.toISOString();
 
   await createParty(
     addPartyForm.name.value,
