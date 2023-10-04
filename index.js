@@ -6,6 +6,7 @@ const state = {
 
 const partiesList = document.querySelector(`#parties`);
 const addPartyForm = document.querySelector(`#addParty`);
+
 addPartyForm.addEventListener("submit", addParty);
 
 // to both fetch & render the parties:
@@ -26,7 +27,7 @@ async function getParties() {
   }
 }
 
-// a function to render the list of parties from state:
+// a function to render the list of parties from state, onto the page:
 function renderParties() {
   if (!state.parties.length) {
     partiesList.innerHTML = `<li>No parties found.</li>`;
@@ -54,46 +55,36 @@ function renderParties() {
   partiesList.replaceChildren(...partyCards)
 }
 
+// function for event handler, to create a new party card based on new form data:
+async function addParty(event) {
+  event.preventDefault();
+  const nameValue = addPartyForm.name.value;
+  const descriptionValue = addPartyForm.description.value;
+  const dateString = new Date(addPartyForm.date.value);
+  const dateISOString = dateString.toISOString();
+  const locationValue = addPartyForm.location.value;
 
-
-// a function to create a new party card based on form data:
-async function createParty(name, description, date, location) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, description, date, location }),
+      body: JSON.stringify({ name: nameValue, description: descriptionValue, date: dateISOString, location: locationValue }),
     });
-    
+
     const json = await response.json();
 
     if (json.error) {
       throw new Error(json.message);
     }
-
+    // clears the inputs
+    addPartyForm.name.value = ``;
+    addPartyForm.description.value = ``;
+    addPartyForm.date.value = ``;
+    addPartyForm.location.value = ``;
     render();
   } catch (error) {
     console.error(error);
   }
-}
-
-// function for event handler, for the createParty function
-async function addParty(event){
-  event.preventDefault();
-  const dateString = new Date(addPartyForm.date.value);
-  const dateISOString = dateString.toISOString();
-
-  await createParty(
-    addPartyForm.name.value,
-    addPartyForm.description.value,
-    dateISOString,
-    addPartyForm.location.value
-  );
-  // clears the inputs
-  addPartyForm.name.value = ``;
-  addPartyForm.description.value = ``;
-  addPartyForm.date.value = ``;
-  addPartyForm.location.value = ``;
 }
 
 // a function to delete an existing party
@@ -106,7 +97,7 @@ async function deleteParty(id) {
       throw new Error("Party could not be deleted.");
     }
     render();
-  } catch(error){
+  } catch (error) {
     console.log(error);
   }
 }
