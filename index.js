@@ -65,10 +65,12 @@ async function addParty(event) {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: addPartyForm.name.value,
-                             description: addPartyForm.description.value,
-                             date: dateISOString,
-                             location: addPartyForm.location.value }),
+      body: JSON.stringify({
+        name: addPartyForm.name.value,
+        description: addPartyForm.description.value,
+        date: dateISOString,
+        location: addPartyForm.location.value
+      }),
     });
 
     const json = await response.json();
@@ -81,7 +83,9 @@ async function addParty(event) {
     addPartyForm.description.value = ``;
     addPartyForm.date.value = ``;
     addPartyForm.location.value = ``;
+
     render();
+
   } catch (error) {
     console.error(error);
   }
