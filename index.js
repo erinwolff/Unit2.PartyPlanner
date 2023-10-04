@@ -58,17 +58,17 @@ function renderParties() {
 // function for event handler, to create a new party card based on new form data:
 async function addParty(event) {
   event.preventDefault();
-  const nameValue = addPartyForm.name.value;
-  const descriptionValue = addPartyForm.description.value;
   const dateString = new Date(addPartyForm.date.value);
   const dateISOString = dateString.toISOString();
-  const locationValue = addPartyForm.location.value;
 
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: nameValue, description: descriptionValue, date: dateISOString, location: locationValue }),
+      body: JSON.stringify({ name: addPartyForm.name.value,
+                             description: addPartyForm.description.value,
+                             date: dateISOString,
+                             location: addPartyForm.location.value }),
     });
 
     const json = await response.json();
